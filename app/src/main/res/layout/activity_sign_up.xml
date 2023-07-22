@@ -19,7 +19,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.29000002"
+        app:layout_constraintVertical_bias="0.1"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <com.google.android.material.textfield.TextInputEditText
@@ -28,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="60dp"
         android:hint="@string/name"
         android:minHeight="35dp"
         android:textColorHint="@color/black_opaque_40"
@@ -71,12 +71,26 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_email"
         tools:ignore="VisualLintTextFieldSize" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="11sp"
+        android:text="@string/already_have_an_account"
+        android:textAlignment="textEnd"
+        android:layout_marginTop="5dp"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:paddingHorizontal="5dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_password"
+        />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/btn_sign_up"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
+        android:layout_marginTop="35dp"
         android:background="@drawable/btn_background"
         android:text="@string/sign_up"
         android:textColor="@color/white"
@@ -90,7 +104,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_marginHorizontal="70dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:background="@color/white"
         android:scaleType="fitXY"
         android:src="@drawable/google_sign_in"
@@ -112,6 +126,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_sign_in_google" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/btn_sign_in_facebook"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="20dp"
+        android:textSize="16sp"
+        android:text="@string/sign_up_with_phone"
+        android:textStyle="bold"
+        android:textColor="@color/primary"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
