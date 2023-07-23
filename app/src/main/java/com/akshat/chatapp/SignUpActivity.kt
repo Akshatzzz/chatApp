@@ -1,6 +1,7 @@
 package com.akshat.chatapp
 
 import android.app.ProgressDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -48,6 +49,7 @@ class SignUpActivity : AppCompatActivity() {
                     user?.let {
                         firebaseDatabase.reference.child("User").child(user.userId).setValue(user)
                     }
+                    startMainActivity()
                     Toast.makeText(
                         this@SignUpActivity, "Successfully Signed Up !!", Toast.LENGTH_SHORT
                     ).show()
@@ -59,6 +61,14 @@ class SignUpActivity : AppCompatActivity() {
                     ).show()
                 }
             }
+    }
+    private fun startMainActivity() {
+        try {
+            val intent = Intent(this@SignUpActivity, MainActivity::class.java)
+            startActivity(intent)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 
     private fun initialize() {

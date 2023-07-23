@@ -6,4 +6,9 @@
     <string name="sign_up">Sign Up</string>
     <string name="already_have_an_account">Already have an account ?</string>
     <string name="sign_up_with_phone">Sign up with phone</string>
+    <string name="new_user">New user ?</string>
+    <string name="sign_in">SIGN IN</string>
+    <string name="sign_in_with_phone">Sign in with phone</string>
+    <string name="logout">Logout</string>
+    <string name="settings">Settings</string>
 </resources>
