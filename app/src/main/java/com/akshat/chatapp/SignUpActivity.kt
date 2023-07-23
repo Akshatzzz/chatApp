@@ -28,6 +28,10 @@ class SignUpActivity : AppCompatActivity() {
             binding.signUpProgress.visibility = View.VISIBLE
             processSignUp()
         }
+        binding.alreayHaveAc.setOnClickListener {
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun processSignUp() {
