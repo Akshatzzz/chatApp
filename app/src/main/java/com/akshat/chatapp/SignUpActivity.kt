@@ -39,6 +39,7 @@ class SignUpActivity : AppCompatActivity() {
         val password = binding.etPassword.text.toString()
         val email = binding.etEmail.text.toString()
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
+            binding.signUpProgress.visibility = View.GONE
             Toast.makeText(this@SignUpActivity, "Please Enter All the Fields", Toast.LENGTH_SHORT)
                 .show()
             return

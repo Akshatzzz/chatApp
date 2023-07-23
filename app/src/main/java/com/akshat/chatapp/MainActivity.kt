@@ -36,7 +36,9 @@ class MainActivity : AppCompatActivity() {
             R.id.logout -> {
                 firebaseAuth.signOut()
                 val intent = Intent(this@MainActivity, SignInActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
+                this@MainActivity.finish()
             }
         }
         return super.onOptionsItemSelected(item)

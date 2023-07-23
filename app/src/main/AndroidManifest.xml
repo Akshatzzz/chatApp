@@ -33,7 +33,6 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
-            android:noHistory="true"
             />
 
         <meta-data
