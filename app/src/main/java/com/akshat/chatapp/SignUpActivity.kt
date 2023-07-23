@@ -31,6 +31,7 @@ class SignUpActivity : AppCompatActivity() {
         binding.alreayHaveAc.setOnClickListener {
             val intent = Intent(this, SignInActivity::class.java)
             startActivity(intent)
+            finish()
         }
     }
 
@@ -71,6 +72,7 @@ class SignUpActivity : AppCompatActivity() {
         try {
             val intent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(intent)
+            finish()
         } catch (e: Exception) {
             e.printStackTrace()
         }

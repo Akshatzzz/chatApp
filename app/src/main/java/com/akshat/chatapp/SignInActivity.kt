@@ -38,8 +38,8 @@ class SignInActivity : AppCompatActivity() {
         }
         binding.tvSignUp.setOnClickListener {
             val intent = Intent(this@SignInActivity, SignUpActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+            finish()
         }
         binding.btnSignInGoogle.setOnClickListener {
             scope.launch {
@@ -56,8 +56,8 @@ class SignInActivity : AppCompatActivity() {
     private fun startMainActivity() {
         try {
             val intent = Intent(this@SignInActivity, MainActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
             startActivity(intent)
+            finish()
         } catch (e: Exception) {
             e.printStackTrace()
         }
