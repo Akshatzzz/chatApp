@@ -8,5 +8,6 @@ data class SignInRequest(
 data class UserData(
     val userId: String,
     val userName: String?,
-    val profilePicture: String?
+    val profilePicture: String?,
+    val lastMessage: String = ""
 )

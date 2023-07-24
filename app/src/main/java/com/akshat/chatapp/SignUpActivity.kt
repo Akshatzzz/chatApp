@@ -51,23 +51,26 @@ class SignUpActivity : AppCompatActivity() {
         fireBaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             binding.signUpProgress.visibility = View.GONE
             if (task.isSuccessful) {
-                    val user = task.result.user?.uid?.let { it1 -> UserModel(name,email,"", it1) }
-                    user?.let {
-                        firebaseDatabase.reference.child("User").child(user.userId).setValue(user)
+                val user = task.result.user?.uid?.let { it1 -> UserModel(name, email, "", it1) }
+                user?.let {
+                    user.userId?.let { it1 ->
+                        firebaseDatabase.reference.child("User").child(it1).setValue(user)
                     }
-                    startMainActivity()
-                    Toast.makeText(
-                        this@SignUpActivity, "Successfully Signed Up !!", Toast.LENGTH_SHORT
-                    ).show()
-                } else {
-                    Toast.makeText(
-                        this@SignUpActivity,
-                        "Couldn't sign in returning ${task.exception?.message}",
-                        Toast.LENGTH_SHORT
-                    ).show()
                 }
+                startMainActivity()
+                Toast.makeText(
+                    this@SignUpActivity, "Successfully Signed Up !!", Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                Toast.makeText(
+                    this@SignUpActivity,
+                    "Couldn't sign in returning ${task.exception?.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
     }
+
     private fun startMainActivity() {
         try {
             val intent = Intent(this@SignUpActivity, MainActivity::class.java)
