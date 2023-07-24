@@ -7,6 +7,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.akshat.chatapp.databinding.ActivitySignInBinding
+import com.akshat.chatapp.helpers.GOOGLE_SIGN_IN_REQUEST_CODE
 import com.akshat.chatapp.helpers.PLEASE_ENTER_ALL_FIELDS
 import com.akshat.chatapp.helpers.SIGN_IN_SUCCESSFUL
 import com.akshat.chatapp.helpers.SOMETHING_WENT_WRONG
@@ -25,7 +26,6 @@ class SignInActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
     lateinit var binding: ActivitySignInBinding
     private val scope = MainScope()
-    private val GOOGLE_SIGN_IN_REQUEST_CODE = 100
     private val googleSignInClient by lazy {
         GoogleSignInClient(
             applicationContext, Identity.getSignInClient(applicationContext)
@@ -119,6 +119,7 @@ class SignInActivity : AppCompatActivity() {
                 showToast(this@SignInActivity, SIGN_IN_SUCCESSFUL)
                 startMainActivity()
             } else {
+                binding.signInProgress.visibility = View.GONE
                 showToast(this@SignInActivity, SOMETHING_WENT_WRONG)
             }
         }

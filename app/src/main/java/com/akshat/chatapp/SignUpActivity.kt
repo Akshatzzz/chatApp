@@ -1,23 +1,39 @@
 package com.akshat.chatapp
 
-import android.app.ProgressDialog
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.akshat.chatapp.databinding.ActivitySignUpBinding
+import com.akshat.chatapp.helpers.GOOGLE_SIGN_IN_REQUEST_CODE
+import com.akshat.chatapp.helpers.PLEASE_ENTER_ALL_FIELDS
+import com.akshat.chatapp.helpers.SIGN_IN_SUCCESSFUL
+import com.akshat.chatapp.helpers.SIGN_UP_SUCCESSFULLY
+import com.akshat.chatapp.helpers.SOMETHING_WENT_WRONG
+import com.akshat.chatapp.helpers.USERS
+import com.akshat.chatapp.helpers.showToast
 import com.akshat.chatapp.model.UserModel
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
+import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
+@Suppress("DEPRECATION")
 class SignUpActivity : AppCompatActivity() {
-    lateinit var binding: ActivitySignUpBinding
-    lateinit var fireBaseAuth: FirebaseAuth
-    lateinit var firebaseDatabase: FirebaseDatabase
+    private lateinit var binding: ActivitySignUpBinding
+    private lateinit var fireBaseAuth: FirebaseAuth
+    private val scope = MainScope()
+    private val googleSignInClient by lazy {
+        GoogleSignInClient(
+            applicationContext, Identity.getSignInClient(applicationContext)
+        )
+    }
+    private val firebaseDatabase by lazy {
+        FirebaseDatabase.getInstance()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySignUpBinding.inflate(layoutInflater)
@@ -33,6 +49,17 @@ class SignUpActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
+        binding.btnSignUpGoogle.setOnClickListener {
+            binding.signUpProgress.visibility = View.VISIBLE
+            scope.launch {
+                val intentSender = googleSignInClient.signIn()
+                if (intentSender != null) {
+                    startIntentSenderForResult(
+                        intentSender, GOOGLE_SIGN_IN_REQUEST_CODE, null, 0, 0, 0
+                    )
+                }
+            }
+        }
     }
 
     private fun processSignUp() {
@@ -41,8 +68,7 @@ class SignUpActivity : AppCompatActivity() {
         val email = binding.etEmail.text.toString()
         if (name.isEmpty() || email.isEmpty() || password.isEmpty()) {
             binding.signUpProgress.visibility = View.GONE
-            Toast.makeText(this@SignUpActivity, "Please Enter All the Fields", Toast.LENGTH_SHORT)
-                .show()
+            showToast(this, PLEASE_ENTER_ALL_FIELDS)
             return
         }
         binding.etEmail.text?.clear()
@@ -54,24 +80,37 @@ class SignUpActivity : AppCompatActivity() {
                 val user = task.result.user?.uid?.let { it1 -> UserModel(name, email, "", it1) }
                 user?.let {
                     user.userId?.let { it1 ->
-                        firebaseDatabase.reference.child("User").child(it1).setValue(user)
+                        firebaseDatabase.reference.child(USERS).child(it1).setValue(user)
                     }
                 }
                 startMainActivity()
-                Toast.makeText(
-                    this@SignUpActivity, "Successfully Signed Up !!", Toast.LENGTH_SHORT
-                ).show()
+                showToast(this, SIGN_UP_SUCCESSFULLY)
             } else {
-                Toast.makeText(
-                    this@SignUpActivity,
-                    "Couldn't sign in returning ${task.exception?.message}",
-                    Toast.LENGTH_SHORT
-                ).show()
+                showToast(this, "${task.exception?.message}")
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        scope.launch {
+            if (resultCode == RESULT_OK) {
+                val signInRequest = data?.let { googleSignInClient.getSignInResultFromIntent(it) }
+                signInRequest?.data?.let { userData ->
+                    firebaseDatabase.reference.child(USERS).child(userData.userId)
+                        .setValue(userData)
+                }
+                showToast(this@SignUpActivity, SIGN_IN_SUCCESSFUL)
+                startMainActivity()
+            } else {
+                binding.signUpProgress.visibility = View.GONE
+                showToast(this@SignUpActivity, SOMETHING_WENT_WRONG)
             }
         }
     }
 
     private fun startMainActivity() {
+        binding.signUpProgress.visibility = View.GONE
         try {
             val intent = Intent(this@SignUpActivity, MainActivity::class.java)
             startActivity(intent)
@@ -83,6 +122,10 @@ class SignUpActivity : AppCompatActivity() {
 
     private fun initialize() {
         fireBaseAuth = FirebaseAuth.getInstance()
-        firebaseDatabase = FirebaseDatabase.getInstance()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        scope.cancel()
     }
 }
