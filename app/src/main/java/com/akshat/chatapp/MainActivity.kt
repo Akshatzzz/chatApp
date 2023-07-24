@@ -7,19 +7,25 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Toast
+import com.akshat.chatapp.adapters.ViewPagerFramgmentAdapter
 import com.akshat.chatapp.databinding.ActivityMainBinding
 import com.akshat.chatapp.databinding.ActivitySignInBinding
+import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayoutMediator
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private val firebaseAuth by lazy {
+        FirebaseAuth.getInstance()
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        firebaseAuth = FirebaseAuth.getInstance()
         setSupportActionBar(binding.mainActivityToolBar.root)
+        setupViewsWithAdaper()
+        addTabLayoutMediator()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -42,5 +48,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    private fun setupViewsWithAdaper() {
+        val pagerAdapter = ViewPagerFramgmentAdapter(this@MainActivity)
+        binding.viewPager.adapter = pagerAdapter
+    }
+    private fun addTabLayoutMediator() {
+        val listOfTitles  = listOf("CHAT","STATUS","CALLS")
+        TabLayoutMediator(
+            binding.tabLayout, binding.viewPager
+        ) { tab: TabLayout.Tab, position: Int ->
+                tab.text = listOfTitles[position]
+        }.attach()
     }
 }

@@ -2,7 +2,6 @@ package com.akshat.chatapp
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,6 @@ import com.akshat.chatapp.helpers.showToast
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.Logger
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
@@ -24,7 +22,7 @@ import kotlinx.coroutines.launch
 @Suppress("DEPRECATION")
 class SignInActivity : AppCompatActivity() {
     private lateinit var firebaseAuth: FirebaseAuth
-    lateinit var binding: ActivitySignInBinding
+    private lateinit var binding: ActivitySignInBinding
     private val scope = MainScope()
     private val googleSignInClient by lazy {
         GoogleSignInClient(
